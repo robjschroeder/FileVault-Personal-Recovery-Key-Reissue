@@ -13,6 +13,7 @@ Then began my task of creating a user friendly dialog for the purpose of reissui
 1. Add the FileVault PRK Reissue.sh script into your Jamf Pro
 2. Create a new policy in Jamf Pro, scoped to computers that need a new key reissued
 3. Add the script to your policy and fill out the following parameters:
+
 -Parameter 4: Link to a banner image
 -Parameter 5: "More Information" button text
 -Parameter 6: "More Information" button link
