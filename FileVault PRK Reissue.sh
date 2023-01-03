@@ -6,15 +6,18 @@
 # Jamf Pro. This script calls for a Jamf recon, so no need
 # to add it as a maintenance payload on your policy. 
 #
+# Downloads and installs swiftDialog if it doesn't already
+# exist on the computer.
+#
 # Created 01.03.2023 @robjschroeder
-# Script Version: 1.0.0
+# Script Version: 1.2.0
 # Last Modified: 01.03.2023
 
 ##################################################
 # Variables -- edit as needed
 
 # Script Version
-scriptVersion="1.0"
+scriptVersion="1.2.0"
 # Banner image for message
 banner="${4:-"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRgKEFxRXAMU_VCzaaGvHKkckwfjmgGncVjA&usqp=CAU"}"
 # More Information Button shown in message
@@ -91,6 +94,29 @@ dialogSuccess="$dialogApp \
 #
 ##################################################
 # Script work -- do not edit below here
+
+# Validate swiftDialog is installed
+if [ ! -e "/Library/Application Support/Dialog/Dialog.app" ]; then
+	echo "Dialog not found, installing..."
+	dialogURL=$(curl --silent --fail "https://api.github.com/repos/bartreardon/swiftDialog/releases/latest" | awk -F '"' "/browser_download_url/ && /pkg\"/ { print \$4; exit }")
+	expectedDialogTeamID="PWA5E9TQ59"
+	# Create a temp directory
+	workDir=$(/usr/bin/basename "$0")
+	tempDir=$(/usr/bin/mktemp -d "/private/tmp/$workDir.XXXXXX")
+	# Download latest version of swiftDialog
+	/usr/bin/curl --location --silent "$dialogURL" -o "$tempDir/Dialog.pkg"
+	# Verify download
+	teamID=$(/usr/sbin/spctl -a -vv -t install "$tempDir/Dialog.pkg" 2>&1 | awk '/origin=/ {print $NF }' | tr -d '()')
+	if [ "$expectedDialogTeamID" = "$teamID" ] || [ "$expectedDialogTeamID" = "" ]; then
+		/usr/sbin/installer -pkg "$tempDir/Dialog.pkg" -target /
+	else
+		echo "Team ID verification failed, could not continue..."
+		exit 6
+	fi
+	/bin/rm -Rf "$tempDir"
+else
+	echo "Dialog v$(dialog --version) installed, continuing..."
+fi
 
 # Get the logged in user's name
 userName=$(/bin/echo "show State:/Users/ConsoleUser" | /usr/sbin/scutil | /usr/bin/awk '/Name :/&&!/loginwindow/{print $3}')
