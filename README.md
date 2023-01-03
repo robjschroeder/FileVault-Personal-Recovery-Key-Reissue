@@ -19,4 +19,6 @@ Then began my task of creating a user friendly dialog for the purpose of reissui
 - Parameter 7: Link to icon shown in dialog
 - Parameter 8: Support's contact info, in case of failure.
 
+If the target computer doesn't have swiftDialog, the script will curl the latest version and install it before continuing. 
+
 The policy can then be ran on the computers that need it, preferably in Self Service so they will be expecting it...
