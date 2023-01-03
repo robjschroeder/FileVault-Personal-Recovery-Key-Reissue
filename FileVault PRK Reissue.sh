@@ -7,7 +7,7 @@
 # to add it as a maintenance payload on your policy. 
 #
 # Created 01.03.2023 @robjschroeder
-# Script Version: 1.0
+# Script Version: 1.0.0
 # Last Modified: 01.03.2023
 
 ##################################################
