@@ -22,3 +22,6 @@ Then began my task of creating a user friendly dialog for the purpose of reissui
 If the target computer doesn't have swiftDialog, the script will curl the latest version and install it before continuing. 
 
 The policy can then be ran on the computers that need it, preferably in Self Service so they will be expecting it...
+
+Validated on:
+- Apple Intel Mac: macOS 13.1 Ventura
