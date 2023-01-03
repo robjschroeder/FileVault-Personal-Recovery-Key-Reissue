@@ -15,9 +15,13 @@ Then began my task of creating a user friendly dialog for the purpose of reissui
 3. Add the script to your policy and fill out the following parameters:
 
 -Parameter 4: Link to a banner image
+
 -Parameter 5: "More Information" button text
+
 -Parameter 6: "More Information" button link
+
 -Parameter 7: Link to icon shown in dialog
+
 -Parameter 8: Support's contact info, in case of failure.
 
 The policy can then be ran on the computers that need it, preferably in Self Service so they will be expecting it...
