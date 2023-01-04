@@ -24,6 +24,6 @@ If the target computer doesn't have swiftDialog, the script will curl the latest
 The policy can then be ran on the computers that need it, preferably in Self Service so they will be expecting it...
 
 ### Validated on:
-- Apple Intel Mac: macOS 13.1 Ventura, macOS 12.1 Monterey
+- Apple Intel Mac: macOS 13.1 Ventura, macOS 12.6.2 Monterey, macOS 12.1 Monterey
 
 Always test in your own environment before pushing to production.
