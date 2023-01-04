@@ -25,3 +25,5 @@ The policy can then be ran on the computers that need it, preferably in Self Ser
 
 ### Validated on:
 - Apple Intel Mac: macOS 13.1 Ventura, macOS 12.1 Monterey
+
+Always test in your own environment before pushing to production.
