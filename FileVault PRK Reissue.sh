@@ -182,7 +182,7 @@ if [[ $BUILD -ge 13 ]] &&  [[ $BUILD -lt 17 ]]; then
 log_user 0
 spawn fdesetup changerecovery -personal
 expect \"Enter a password for '/', or the recovery key:\"
-send {${USER_PASS}}   
+send {${userPass}}   
 send \r
 log_user 1
 expect eof
@@ -195,7 +195,7 @@ expect \"Enter the user name:\"
 send {${userName}}   
 send \r
 expect \"Enter a password for '/', or the recovery key:\"
-send {${USER_PASS}}   
+send {${userPass}}   
 send \r
 log_user 1
 expect eof
@@ -203,10 +203,8 @@ expect eof
 					else
 					echo "OS version not 10.9+ or OS version unrecognized"
 					echo "$(/usr/bin/sw_vers -productVersion)"
-					eval "$dialogError"
 					exit 5
 					fi
-					
 					sleep 30
 					echo "Recovery Key reissued for user: $userName, running recon now..."
 					sudo jamf recon
