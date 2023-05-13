@@ -36,6 +36,9 @@ forgotMessage="## FileVault Recovery Key\n\nYour FileVault Recovery Key is curre
 # The body of the message that will be displayed if a failure occurs.
 FAIL_MESSAGE="## Please check your password and try again.\n\nIf issue persists, please contact support: $supportInformation."
 
+# Create a temp command file for dialog even though it is unused - this prevents old command files from blocking the dialog window
+dialogCommandFile=$( mktemp -u /var/tmp/dialogCommand.XXX )
+
 # Main dialog
 dialogCMD="$dialogApp \
 --title \"none\" \
@@ -49,7 +52,9 @@ dialogCMD="$dialogApp \
 --position 'centre' \
 --ontop \
 --moveable \
---textfield \"Enter Password\",secure,required"
+--textfield \"Enter Password\",secure,required \
+--commandfile \"$dialogCommandFile\" "
+
 
 # Forgot password dialog
 dialogForgotCMD="$dialogApp \
@@ -64,7 +69,8 @@ dialogForgotCMD="$dialogApp \
 --position 'centre' \
 --ontop \
 --moveable \
---textfield \"Enter Password\",secure,required"
+--textfield \"Enter Password\",secure,required \
+--commandfile \"$dialogCommandFile\" "
 
 # Error dialog
 dialogError="$dialogApp \
@@ -76,7 +82,8 @@ dialogError="$dialogApp \
 --messagefont 'size=14' \
 --position 'centre' \
 --ontop \
---moveable \ "
+--moveable \
+--commandfile \"$dialogCommandFile\" "
 
 # Success Dialog
 dialogSuccess="$dialogApp \
@@ -89,7 +96,8 @@ dialogSuccess="$dialogApp \
 --messagefont 'size=14' \
 --position 'centre' \
 --ontop \
---moveable \ "
+--moveable \
+--commandfile \"$dialogCommandFile\" "
 
 #
 ##################################################
@@ -131,6 +139,7 @@ BUILD=$(/usr/bin/sw_vers -buildVersion | awk {'print substr ($0,0,2)'})
 function check_logged_in_user {
 	if [ "$userName" = "root" ] || [ -z "$currentuser" ]; then
 		echo "Nobody is logged in."
+        rm -rf $dialogCommandFile
 		exit 0
 	fi
 }
@@ -140,6 +149,7 @@ userCheck=$(fdesetup list | awk -v usrN="$userNameUUID" -F, 'match($0, usrN) {pr
 if [ "${userCheck}" != "${userName}" ]; then
 	echo "This user is not a FileVault 2 enabled user."
 	eval "$dialogError"
+    rm -rf $dialogCommandFile
     exit 3
 fi
 
@@ -155,6 +165,7 @@ if [ "${statusCheck}" != "${expectedStatus}" ]; then
 	echo "The encryption process has not completed."
 	echo "${encryptCheck}"
 	"$dialogError"
+    rm -rf $dialogCommandFile
     exit 4
 fi
 
@@ -171,6 +182,7 @@ until /usr/bin/dscl /Search -authonly "$userName" "${userPass}" &>/dev/null; do
 	if (( TRY >= 5 )); then
 		echo "[ERROR] Password prompt unsuccessful after 5 attempts. Displaying \"forgot password\" message..."
 		eval "$dialogError"
+        rm -rf $dialogCommandFile
 		exit 1
 	fi
 done
@@ -203,10 +215,12 @@ expect eof
 					else
 					echo "OS version not 10.9+ or OS version unrecognized"
 					echo "$(/usr/bin/sw_vers -productVersion)"
+                    rm -rf $dialogCommandFile
 					exit 5
 					fi
 					sleep 30
 					echo "Recovery Key reissued for user: $userName, running recon now..."
 					sudo jamf recon
 					eval "$dialogSuccess"
+                    rm -rf $dialogCommandFile
 					exit 0
