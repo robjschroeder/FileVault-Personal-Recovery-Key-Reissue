@@ -13,17 +13,18 @@ Then began my task of creating a user friendly dialog for the purpose of reissui
 1. Add the FileVault PRK Reissue.sh script into your Jamf Pro
 2. Create a new policy in Jamf Pro, scoped to computers that need a new key reissued
 3. Add the script to your policy and fill out the following parameters:
-- Parameter 4: Link to a banner image
-- Parameter 5: "More Information" button text
-- Parameter 6: "More Information" button link
-- Parameter 7: Link to icon shown in dialog
-- Parameter 8: Support's contact info, in case of failure.
+- Parameter 4: Path to log file
+- Parameter 5: Link to a banner image
+- Parameter 6: "More Information" button text
+- Parameter 7: "More Information" button link
+- Parameter 8: Link to icon shown in dialog
+- Parameter 9: Support's contact info, in case of failure.
 
 If the target computer doesn't have swiftDialog, the script will curl the latest version and install it before continuing. 
 
 The policy can then be ran on the computers that need it, preferably in Self Service so they will be expecting it...
 
 ### Validated on:
-- Apple Intel Mac: macOS 13.1 Ventura, macOS 12.6.2 Monterey, macOS 12.1 Monterey
+- Apple Intel Mac: macOS Ventura, macOS Monterey
 
 Always test in your own environment before pushing to production.
